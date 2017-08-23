@@ -24,6 +24,8 @@ type ChromeDriver struct {
 	BaseUrl string
 	//The number of threads to use for handling HTTP requests. Default: 4
 	Threads int
+	//Proxy shema for proxy setting
+	Proxy string
 	//The path to use for the ChromeDriver server log. Default: ./chromedriver.log
 	LogPath string
 	// Log file to dump chromedriver stdout/stderr. If "" send to terminal. Default: ""
@@ -55,6 +57,7 @@ var switchesFormat = "-port=%d -url-base=%s -log-path=%s -http-threads=%d"
 
 var cmdchan = make(chan error)
 
+//Start driver
 func (d *ChromeDriver) Start() error {
 	csferr := "chromedriver start failed: "
 	if d.cmd != nil {
@@ -77,6 +80,9 @@ func (d *ChromeDriver) Start() error {
 	switches = append(switches, "-http-threads="+strconv.Itoa(d.Threads))
 	if d.BaseUrl != "" {
 		switches = append(switches, "-url-base="+d.BaseUrl)
+	}
+	if d.Proxy != "" {
+		switches = append(switches, "-proxy="+d.Proxy)
 	}
 
 	d.cmd = exec.Command(d.path, switches...)
@@ -109,6 +115,7 @@ func (d *ChromeDriver) Start() error {
 	return nil
 }
 
+//Stop the driver
 func (d *ChromeDriver) Stop() error {
 	if d.cmd == nil {
 		return errors.New("stop failed: chromedriver not running")
@@ -123,6 +130,7 @@ func (d *ChromeDriver) Stop() error {
 	return nil
 }
 
+//NewSession start a conversation
 func (d *ChromeDriver) NewSession(desired, required Capabilities) (*Session, error) {
 	//id, capabs, err := d.newSession(desired, required)
 	//return &Session{id, capabs, d}, err
@@ -134,6 +142,7 @@ func (d *ChromeDriver) NewSession(desired, required Capabilities) (*Session, err
 	return session, nil
 }
 
+//Sessions returns all openning conversation
 func (d *ChromeDriver) Sessions() ([]Session, error) {
 	sessions, err := d.sessions()
 	if err != nil {

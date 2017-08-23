@@ -70,8 +70,7 @@ var statusCodeStrings = map[int]string{
 	34: "Target provided for a move action is out of bounds.",
 }
 
-//type StatusErrorCode int
-
+//StackFrame StatusErrorCode int
 type StackFrame struct {
 	FileName   string
 	ClassName  string
