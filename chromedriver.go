@@ -115,6 +115,14 @@ func (d *ChromeDriver) Start() error {
 	return nil
 }
 
+//AddProxy set proxy via chrome startup command line params
+func (d *ChromeDriver) AddProxy(proxy string) bool {
+	if proxy != "" {
+		d.Proxy = proxy
+	}
+	return true
+}
+
 //Stop the driver
 func (d *ChromeDriver) Stop() error {
 	if d.cmd == nil {
