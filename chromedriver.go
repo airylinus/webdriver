@@ -82,7 +82,7 @@ func (d *ChromeDriver) Start() error {
 		switches = append(switches, "-url-base="+d.BaseUrl)
 	}
 	if d.Proxy != "" {
-		switches = append(switches, "-proxy="+d.Proxy)
+		switches = append(switches, "--proxy-server="+d.Proxy)
 	}
 
 	d.cmd = exec.Command(d.path, switches...)
